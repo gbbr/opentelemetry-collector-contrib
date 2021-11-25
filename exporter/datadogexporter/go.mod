@@ -19,7 +19,7 @@ require (
 	go.opentelemetry.io/collector v0.38.1-0.20211103011348-c24dfeb047a8
 	go.opentelemetry.io/collector/model v0.38.1-0.20211103011348-c24dfeb047a8
 	go.uber.org/zap v1.19.1
-	gopkg.in/DataDog/dd-trace-go.v1 v1.33.0
+	gopkg.in/DataDog/dd-trace-go.v1 v1.34.0
 	gopkg.in/zorkian/go-datadog-api.v2 v2.30.0
 )
 
@@ -56,7 +56,6 @@ require (
 	golang.org/x/sys v0.0.0-20210816074244-15123e1e1f71 // indirect
 	golang.org/x/time v0.0.0-20200630173020-3af7569d3a1e // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
-	gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b // indirect
 )
 
 replace github.com/open-telemetry/opentelemetry-collector-contrib/internal/coreinternal => ../../internal/coreinternal
