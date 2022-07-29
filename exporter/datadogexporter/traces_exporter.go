@@ -104,6 +104,7 @@ func (exp *traceExporter) consumeTraces(
 	ctx context.Context,
 	td ptrace.Traces,
 ) (err error) {
+	exp.params.Logger.Info(fmt.Sprintf("Got %d spans.", td.SpanCount()))
 	defer func() { err = exp.scrubber.Scrub(err) }()
 	if exp.cfg.HostMetadata.Enabled {
 		// start host metadata with resource attributes from

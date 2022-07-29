@@ -129,6 +129,9 @@ func TestDefaultProcessors(t *testing.T) {
 			processor: "cumulativetodelta",
 		},
 		{
+			processor: "datadogstats",
+		},
+		{
 			processor: "tail_sampling",
 		},
 		{

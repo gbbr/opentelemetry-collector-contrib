@@ -471,6 +471,11 @@ func (t *Translator) MapMetrics(ctx context.Context, md pmetric.Metrics, consume
 
 			for k := 0; k < metricsArray.Len(); k++ {
 				md := metricsArray.At(k)
+				t.logger.Info(fmt.Sprintf("Got metric %q, with attributes: %#v.\nData Type: %s.",
+					md.Name(),
+					rm.Resource().Attributes().AsRaw(),
+					md.DataType(),
+				))
 				baseDims := &Dimensions{
 					name:     md.Name(),
 					tags:     additionalTags,
