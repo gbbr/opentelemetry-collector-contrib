@@ -13,12 +13,12 @@ require (
 	github.com/open-telemetry/opentelemetry-collector-contrib/internal/coreinternal v0.38.0
 	github.com/open-telemetry/opentelemetry-collector-contrib/pkg/resourcetotelemetry v0.38.0
 	github.com/patrickmn/go-cache v2.1.0+incompatible
-	github.com/stretchr/testify v1.7.0
+	github.com/stretchr/testify v1.8.0
 	github.com/tinylib/msgp v1.1.5 // indirect
 	github.com/zorkian/go-datadog-api v2.29.0+incompatible // indirect
 	go.opentelemetry.io/collector v0.38.1-0.20211103011348-c24dfeb047a8
 	go.opentelemetry.io/collector/model v0.38.1-0.20211103011348-c24dfeb047a8
-	go.uber.org/zap v1.19.1
+	go.uber.org/zap v1.24.0
 	gopkg.in/DataDog/dd-trace-go.v1 v1.33.0
 	gopkg.in/zorkian/go-datadog-api.v2 v2.30.0
 )
@@ -56,7 +56,7 @@ require (
 	golang.org/x/sys v0.0.0-20210816074244-15123e1e1f71 // indirect
 	golang.org/x/time v0.0.0-20200630173020-3af7569d3a1e // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
-	gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b // indirect
+	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
 
 replace github.com/open-telemetry/opentelemetry-collector-contrib/internal/coreinternal => ../../internal/coreinternal
