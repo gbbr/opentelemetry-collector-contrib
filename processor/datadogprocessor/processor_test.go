@@ -44,7 +44,7 @@ func TestProcessorStart(t *testing.T) {
 		require.True(t, p.Capabilities().MutatesData)
 		err = p.Start(ctx, &mockHost{
 			Exporters: exporters(map[string]exporter.Metrics{
-				"test-exporter": &mockMetricsExporter{},
+				"test-exporter": &mockMetricsExporter{ID: 1},
 			}),
 		})
 		require.ErrorContains(t, err, `failed to find metrics exporter "datadog"`)
@@ -56,9 +56,9 @@ func TestProcessorStart(t *testing.T) {
 		defer p.Shutdown(ctx) //nolint:errcheck
 		err = p.Start(ctx, &mockHost{
 			Exporters: exporters(map[string]exporter.Metrics{
-				"test-exporter": &mockMetricsExporter{},
-				"datadog/1":     &mockMetricsExporter{},
-				"datadog/2":     &mockMetricsExporter{},
+				"test-exporter": &mockMetricsExporter{ID: 1},
+				"datadog/1":     &mockMetricsExporter{ID: 2},
+				"datadog/2":     &mockMetricsExporter{ID: 3},
 			}),
 		})
 		require.ErrorContains(t, err, `too many exporters of type "datadog"`)
@@ -68,44 +68,54 @@ func TestProcessorStart(t *testing.T) {
 		p, err := newProcessor(ctx, zap.NewNop(), createDefaultConfig(), &mockTracesConsumer{})
 		require.NoError(t, err)
 		defer p.Shutdown(ctx) //nolint:errcheck
+		a := &mockMetricsExporter{ID: 1}
+		b := &mockMetricsExporter{ID: 2}
 		err = p.Start(ctx, &mockHost{
 			Exporters: exporters(map[string]exporter.Metrics{
-				"test-exporter": &mockMetricsExporter{},
-				"datadog":       &mockMetricsExporter{},
+				"test-exporter": a,
+				"datadog":       b,
 			}),
 		})
 		require.NoError(t, err)
+		require.EqualValues(t, p.metricsExporter, b)
 	})
 
 	t.Run("succeed/1", func(t *testing.T) {
 		p, err := newProcessor(ctx, zap.NewNop(), createDefaultConfig(), &mockTracesConsumer{})
 		require.NoError(t, err)
 		defer p.Shutdown(ctx) //nolint:errcheck
+		a := &mockMetricsExporter{ID: 1}
+		b := &mockMetricsExporter{ID: 2}
 		err = p.Start(ctx, &mockHost{
 			Exporters: exporters(map[string]exporter.Metrics{
-				"test-exporter": &mockMetricsExporter{},
-				"datadog/2":     &mockMetricsExporter{},
+				"test-exporter": a,
+				"datadog/2":     b,
 			}),
 		})
 		require.NoError(t, err)
+		require.EqualValues(t, p.metricsExporter, b)
 	})
 
 	t.Run("succeed/2", func(t *testing.T) {
 		lp, err := newProcessor(ctx, zap.NewNop(), &Config{MetricsExporter: component.NewIDWithName("datadog", "2")}, &mockTracesConsumer{})
 		require.NoError(t, err)
 		defer lp.Shutdown(ctx) //nolint:errcheck
+		a := &mockMetricsExporter{ID: 1}
+		b := &mockMetricsExporter{ID: 2}
+		c := &mockMetricsExporter{ID: 3}
 		err = lp.Start(ctx, &mockHost{
 			Exporters: exporters(map[string]exporter.Metrics{
-				"test-exporter": &mockMetricsExporter{},
-				"datadog/1":     &mockMetricsExporter{},
-				"datadog/2":     &mockMetricsExporter{},
+				"test-exporter": a,
+				"datadog/1":     b,
+				"datadog/2":     c,
 			}),
 		})
 		require.NoError(t, err)
+		require.EqualValues(t, lp.metricsExporter, c)
 	})
 }
 
-func TestProcessorIngest(t *testing.T) {
+func TestProcessorConsumeTraces(t *testing.T) {
 	var mockConsumer mockTracesConsumer
 	ctx := context.Background()
 	p, err := newProcessor(ctx, zap.NewNop(), createDefaultConfig(), &mockConsumer)
@@ -253,6 +263,8 @@ var _ exporter.Metrics = (*mockMetricsExporter)(nil)
 type mockMetricsExporter struct {
 	mockComponent
 	mockMetricsConsumer
+
+	ID int
 }
 
 var _ exporter.Traces = (*mockTracesExporter)(nil)
